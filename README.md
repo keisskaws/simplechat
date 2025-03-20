@@ -15,7 +15,7 @@ AWS Bedrock のLLM モデルを使用した、Basic 認証付きのチャット�
 - フロントエンド: React アプリケーション (S3 + CloudFront でホスティング)
 - バックエンド: API Gateway + Lambda
 - AI モデル: Amazon Bedrock の Nova Lite 
-- 認証: API Gateway の Lambda オーソライザーによる Basic 認証
+- トップ画面: Basic 認証
 
 ## 前提条件
 
@@ -104,9 +104,7 @@ const MODEL_ID = process.env.MODEL_ID || 'amazon.nova-lite-v1:0';
 
 ### 認証情報の変更
 
-認証情報は環境変数として設定されています。デプロイ時に変更できます：
-
-AUTH_USERNAME=newuser AUTH_PASSWORD=newpassword cdk deploy
+認証情報は変数として設定されています。デプロイ時に変更できます：
 
 ### フロントエンドのカスタマイズ
 
@@ -116,7 +114,7 @@ AUTH_USERNAME=newuser AUTH_PASSWORD=newpassword cdk deploy
 
 - 本番環境では、認証情報を環境変数ではなく AWS Secrets Manager などのサービスを使用して管理することを検討してください
 - API Gateway と CloudFront のキャッシュ設定を適切に行い、パフォーマンスとコストのバランスを取ることが重要です
-- フロントエンドの環境変数はビルド時に埋め込まれるため、変更するには再ビルドが必要です
+- フロントエンドの変数はビルド時に埋め込まれるため、変更するには再ビルドが必要です
 
 ## クリーンアップ
 
