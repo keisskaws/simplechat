@@ -29,44 +29,48 @@ AWS Bedrock のLLM モデルを使用した、Basic 認証付きのチャット�
 
 ### 1. リポジトリのクローン
 
-git clone https://github.com/keisskaws/simplechat.git
-cd simplechat
+$ git clone https://github.com/keisskaws/simplechat.git
+$ cd simplechat
 
 ### 2. 依存関係のインストール
 
 # CDKプロジェクトの依存関係をインストール
-npm install
+
+$ npm install
 
 # Lambda関数の依存関係をインストール
-cd lambda
-npm install
-cd ..
+
+$ cd lambda
+$ npm install
+$ cd ..
 
 # フロントエンドの依存関係をインストール
-npx create-react-app frontend
-cp -pr frontend-tmp/src frontend/src
-cp -pr frontend-tmp/public frontend/public
-cp -pr frontend-tmp/.env frontend
+
+$ npx create-react-app frontend
+$ cp -pr frontend-tmp/src frontend/src
+$ cp -pr frontend-tmp/public frontend/public
+$ cp -pr frontend-tmp/.env frontend
 
 ### 4. フロントエンドのビルド
-cd frontend
-npm install
-npm install axios
-npm run build
-cd ..
 
+$ cd frontend
+$ npm install
+$ npm install axios
+$ npm run build
+$ cd ..
 
 ### 5. AWS CDK のブートストラップ（初回のみ）
 
-cdk bootstrap
+$ cdk bootstrap
 
 ### 6. CDK スタックのデプロイ
 
 # 環境変数を設定してデプロイ（Linux/macOS）
-cdk deploy
 
+$ cdk deploy
 
 ### 7. フロントエンドの設定更新とデプロイ
+
 デプロイ後に表示された OutputsのBedrockChatbotStack.ApiGatewayURLを確認し .env ファイルを更新:
 *************************************************************************************************
 Outputs:
@@ -76,15 +80,16 @@ BedrockChatbotStack.CloudFrontURL = https://xxxxxxxxx.cloudfront.net
 BedrockChatbotStack.ModelId = amazon.nova-lite-v1:0
 *************************************************************************************************
 
-cd frontend
+$ cd frontend
 
 # .env ファイルを編集して API エンドポイントを更新(BedrockChatbotStack.ApiGatewayURL)
-vi .env
+
+$ vi .env
 REACT_APP_API_ENDPOINT=https://yyyyyyyyy.execute-api.us-east-1.amazonaws.com/prod/
 
-npm run build
-cd ..
-cdk deploy
+$ npm run build
+$ cd ..
+$ cdk deploy
 
 ## 使用方法
 
@@ -120,13 +125,13 @@ const MODEL_ID = process.env.MODEL_ID || 'amazon.nova-lite-v1:0';
 
 不要になったリソースを削除するには：
 
-cdk destroy
+$ cdk destroy
 
-## コスト
+### コスト
 
 このアプリケーションは以下の AWS サービスを使用し、それぞれに料金が発生する可能性があります：
 
-- Amazon Bedrock (Claude 3 Haiku モデルの使用料)
+- Amazon Bedrock (Nova lite モデルの使用料)
 - AWS Lambda (関数の実行時間)
 - Amazon API Gateway (API コール)
 - Amazon S3 (ストレージとデータ転送)
@@ -143,7 +148,6 @@ cdk destroy
 
 ### 認証エラー
 - Basic 認証のユーザー名とパスワードが正しいことを確認
-- Lambda オーソライザーのログを確認
 
 ### モデルエラー
 - Bedrock モデルが有効化されていることを確認
@@ -157,7 +161,6 @@ cdk destroy
 
 - AWS CDK
 - Amazon Bedrock
-- Anthropic Claude
 - React
 
 ---
