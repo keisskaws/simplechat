@@ -29,7 +29,7 @@ AWS Bedrock のLLM モデルを使用した、Basic 認証付きのチャット�
 
 ### 1. リポジトリのクローン
 
-$ git clone https://github.com/keisskaws/simplechat.git
+$ git clone https://github.com/keisskaws/simplechat.git <br>
 $ cd simplechat
 
 ### 2. 依存関係のインストール
@@ -40,23 +40,23 @@ $ npm install
 
 # Lambda関数の依存関係をインストール
 
-$ cd lambda
-$ npm install
+$ cd lambda <br>
+$ npm install <br>
 $ cd ..
 
 # フロントエンドの依存関係をインストール
 
-$ npx create-react-app frontend
-$ cp -pr frontend-tmp/src frontend/src
-$ cp -pr frontend-tmp/public frontend/public
+$ npx create-react-app frontend <br>
+$ cp -pr frontend-tmp/src frontend/src <br>
+$ cp -pr frontend-tmp/public frontend/public <br>
 $ cp -pr frontend-tmp/.env frontend
 
 ### 4. フロントエンドのビルド
 
-$ cd frontend
-$ npm install
-$ npm install axios
-$ npm run build
+$ cd frontend <br>
+$ npm install <br>
+$ npm install axios <br>
+$ npm run build <br>
 $ cd ..
 
 ### 5. AWS CDK のブートストラップ（初回のみ）
@@ -84,12 +84,12 @@ $ cd frontend
 
 # .env ファイルを編集して API エンドポイントを更新(BedrockChatbotStack.ApiGatewayURL)
 
-$ vi .env
+$ vi .env <br>
 REACT_APP_API_ENDPOINT=https://yyyyyyyyy.execute-api.us-east-1.amazonaws.com/prod/
 
-$ npm run build
-$ cd ..
-$ cdk deploy
+$ npm run build <br>
+$ cd .. <br>
+$ cdk deploy <br>
 
 ## 使用方法
 
