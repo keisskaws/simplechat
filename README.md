@@ -4,7 +4,7 @@ AWS Bedrock のLLM モデルを使用した、Basic 認証付きのチャット�
 
 ## 機能
 
-- Claude 3 Haiku モデルを使用したテキスト生成
+- Amazon Nova モデルを使用したテキスト生成
 - 会話履歴の保持（ブラウザのローカルストレージを使用）
 - API Gateway の Basic 認証によるセキュリティ保護
 - レスポンシブデザインのユーザーインターフェース
@@ -14,7 +14,7 @@ AWS Bedrock のLLM モデルを使用した、Basic 認証付きのチャット�
 
 - フロントエンド: React アプリケーション (S3 + CloudFront でホスティング)
 - バックエンド: API Gateway + Lambda
-- AI モデル: Amazon Bedrock の Claude 3 Haiku
+- AI モデル: Amazon Bedrock の Nova Lite 
 - 認証: API Gateway の Lambda オーソライザーによる Basic 認証
 
 ## 前提条件
@@ -23,14 +23,14 @@ AWS Bedrock のLLM モデルを使用した、Basic 認証付きのチャット�
 - AWS CLI がインストールされ、設定済み
 - Node.js v14 以上
 - AWS CDK v2 がインストール済み
-- Amazon Bedrock へのアクセス権限と Claude 3 Haiku モデルの有効化
+- Amazon Bedrock へのアクセス権限と Nova lite モデルの有効化
 
 ## セットアップと展開
 
 ### 1. リポジトリのクローン
 
-git clone https://github.com/yourusername/bedrock-chatbot.git
-cd bedrock-chatbot
+git clone https://github.com/keisskaws/simplechat.git
+cd simplechat
 
 ### 2. 依存関係のインストール
 
@@ -47,25 +47,14 @@ npx create-react-app frontend
 cp -pr frontend-tmp/src frontend/src
 cp -pr frontend-tmp/public frontend/public
 cp -pr frontend-tmp/.env frontend
+
+### 4. フロントエンドのビルド
 cd frontend
 npm install
 npm install axios
 npm run build
 cd ..
 
-### 3. フロントエンドの設定
-
-frontend/.env ファイルを作成または編集:
-
-REACT_APP_API_ENDPOINT=YOUR_API_ENDPOINT
-
-※ YOUR_API_ENDPOINT はデプロイ後に取得した実際の API エンドポイントに置き換えます。
-
-### 4. フロントエンドのビルド
-
-cd frontend
-npm run build
-cd ..
 
 ### 5. AWS CDK のブートストラップ（初回のみ）
 
@@ -76,27 +65,32 @@ cdk bootstrap
 # 環境変数を設定してデプロイ（Linux/macOS）
 cdk deploy
 
-# または、Windows PowerShell の場合
-cdk deploy
-
-# または、Windows CMD の場合
-cdk deploy
 
 ### 7. フロントエンドの設定更新とデプロイ
-
-デプロイ後に表示された API エンドポイントを使用して、フロントエンドの .env ファイルを更新:
+デプロイ後に表示された OutputsのBedrockChatbotStack.ApiGatewayURLを確認し .env ファイルを更新:
+*************************************************************************************************
+Outputs:
+BedrockChatbotStack.ApiGatewayURL = https://yyyyyyyyy.execute-api.us-east-1.amazonaws.com/prod/
+BedrockChatbotStack.ChatbotApiEndpointAA2295B0 = https://yyyyyyyy.execute-api.us-east-1.amazonaws.com/prod/
+BedrockChatbotStack.CloudFrontURL = https://xxxxxxxxx.cloudfront.net
+BedrockChatbotStack.ModelId = amazon.nova-lite-v1:0
+*************************************************************************************************
 
 cd frontend
-# .env ファイルを編集して API エンドポイントを更新
+
+# .env ファイルを編集して API エンドポイントを更新(BedrockChatbotStack.ApiGatewayURL)
+vi .env
+REACT_APP_API_ENDPOINT=https://yyyyyyyyy.execute-api.us-east-1.amazonaws.com/prod/
+
 npm run build
 cd ..
 cdk deploy
 
 ## 使用方法
 
-1. デプロイ後に表示された WebsiteURL にアクセス
+1. デプロイ後に表示された BedrockChatbotStack.CloudFrontURL  にアクセス
 2. チャットボックスにメッセージを入力
-3. Claude 3 Haiku からの応答を受け取る
+3. Amazon Nova lite からの応答を受け取る
 4. 会話履歴はブラウザのローカルストレージに保存され、ページを再読み込みしても維持
 5. 「会話をクリア」ボタンをクリックして会話履歴をリセット
 
@@ -106,7 +100,7 @@ cdk deploy
 
 lambda/index.js ファイルの MODEL_ID 変数を変更することで、別の Bedrock モデルを使用できます：
 
-const MODEL_ID = process.env.MODEL_ID || 'anthropic.claude-3-haiku-20240307-v1:0';
+const MODEL_ID = process.env.MODEL_ID || 'amazon.nova-lite-v1:0';
 
 ### 認証情報の変更
 
