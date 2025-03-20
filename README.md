@@ -1,2 +1,174 @@
-# simplechat
-simplechat
+# Bedrock チャットボット
+
+AWS Bedrock のLLM モデルを使用した、Basic 認証付きのチャットボットアプリケーションです。CDK を使用してインフラストラクチャをコードとして管理しています。
+
+## 機能
+
+- Claude 3 Haiku モデルを使用したテキスト生成
+- 会話履歴の保持（ブラウザのローカルストレージを使用）
+- API Gateway の Basic 認証によるセキュリティ保護
+- レスポンシブデザインのユーザーインターフェース
+- CloudFront + S3 によるフロントエンドのホスティング
+
+## アーキテクチャ
+
+- フロントエンド: React アプリケーション (S3 + CloudFront でホスティング)
+- バックエンド: API Gateway + Lambda
+- AI モデル: Amazon Bedrock の Claude 3 Haiku
+- 認証: API Gateway の Lambda オーソライザーによる Basic 認証
+
+## 前提条件
+
+- AWS アカウント
+- AWS CLI がインストールされ、設定済み
+- Node.js v14 以上
+- AWS CDK v2 がインストール済み
+- Amazon Bedrock へのアクセス権限と Claude 3 Haiku モデルの有効化
+
+## セットアップと展開
+
+### 1. リポジトリのクローン
+
+git clone https://github.com/yourusername/bedrock-chatbot.git
+cd bedrock-chatbot
+
+### 2. 依存関係のインストール
+
+# CDKプロジェクトの依存関係をインストール
+npm install
+
+# Lambda関数の依存関係をインストール
+cd lambda
+npm install
+cd ..
+
+# フロントエンドの依存関係をインストール
+npx create-react-app frontend
+cp -pr frontend-tmp/src frontend/src
+cp -pr frontend-tmp/public frontend/public
+cp -pr frontend-tmp/.env frontend
+cd frontend
+npm install
+npm install axios
+npm run build
+cd ..
+
+### 3. フロントエンドの設定
+
+frontend/.env ファイルを作成または編集:
+
+REACT_APP_API_ENDPOINT=YOUR_API_ENDPOINT
+
+※ YOUR_API_ENDPOINT はデプロイ後に取得した実際の API エンドポイントに置き換えます。
+
+### 4. フロントエンドのビルド
+
+cd frontend
+npm run build
+cd ..
+
+### 5. AWS CDK のブートストラップ（初回のみ）
+
+cdk bootstrap
+
+### 6. CDK スタックのデプロイ
+
+# 環境変数を設定してデプロイ（Linux/macOS）
+cdk deploy
+
+# または、Windows PowerShell の場合
+cdk deploy
+
+# または、Windows CMD の場合
+cdk deploy
+
+### 7. フロントエンドの設定更新とデプロイ
+
+デプロイ後に表示された API エンドポイントを使用して、フロントエンドの .env ファイルを更新:
+
+cd frontend
+# .env ファイルを編集して API エンドポイントを更新
+npm run build
+cd ..
+cdk deploy
+
+## 使用方法
+
+1. デプロイ後に表示された WebsiteURL にアクセス
+2. チャットボックスにメッセージを入力
+3. Claude 3 Haiku からの応答を受け取る
+4. 会話履歴はブラウザのローカルストレージに保存され、ページを再読み込みしても維持
+5. 「会話をクリア」ボタンをクリックして会話履歴をリセット
+
+## カスタマイズ
+
+### モデルの変更
+
+lambda/index.js ファイルの MODEL_ID 変数を変更することで、別の Bedrock モデルを使用できます：
+
+const MODEL_ID = process.env.MODEL_ID || 'anthropic.claude-3-haiku-20240307-v1:0';
+
+### 認証情報の変更
+
+認証情報は環境変数として設定されています。デプロイ時に変更できます：
+
+AUTH_USERNAME=newuser AUTH_PASSWORD=newpassword cdk deploy
+
+### フロントエンドのカスタマイズ
+
+フロントエンドは React アプリケーションとして実装されています。frontend/src ディレクトリ内のファイルを編集してカスタマイズできます。
+
+## セキュリティ上の考慮事項
+
+- 本番環境では、認証情報を環境変数ではなく AWS Secrets Manager などのサービスを使用して管理することを検討してください
+- API Gateway と CloudFront のキャッシュ設定を適切に行い、パフォーマンスとコストのバランスを取ることが重要です
+- フロントエンドの環境変数はビルド時に埋め込まれるため、変更するには再ビルドが必要です
+
+## クリーンアップ
+
+不要になったリソースを削除するには：
+
+cdk destroy
+
+## コスト
+
+このアプリケーションは以下の AWS サービスを使用し、それぞれに料金が発生する可能性があります：
+
+- Amazon Bedrock (Claude 3 Haiku モデルの使用料)
+- AWS Lambda (関数の実行時間)
+- Amazon API Gateway (API コール)
+- Amazon S3 (ストレージとデータ転送)
+- Amazon CloudFront (データ転送)
+
+使用量に応じて料金が発生するため、不要な場合はリソースを削除することをお勧めします。
+
+## トラブルシューティング
+
+### API エラー
+- API Gateway のログを確認
+- Lambda 関数のログを CloudWatch Logs で確認
+- CORS 設定が正しいことを確認
+
+### 認証エラー
+- Basic 認証のユーザー名とパスワードが正しいことを確認
+- Lambda オーソライザーのログを確認
+
+### モデルエラー
+- Bedrock モデルが有効化されていることを確認
+- Lambda 関数に適切な IAM 権限があることを確認
+
+## ライセンス
+
+このプロジェクトは MIT ライセンスの下で公開されています。
+
+## 謝辞
+
+- AWS CDK
+- Amazon Bedrock
+- Anthropic Claude
+- React
+
+---
+
+このプロジェクトは AWS のサービスを使用していますが、AWS によって公式にサポートまたは推奨されているものではありません。
+
