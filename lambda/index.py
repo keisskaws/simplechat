@@ -4,7 +4,7 @@ import os
 import requests # boto3, re, ClientErrorは不要になったため削除し、requestsを追加
 
 # 環境変数からFastAPIのエンドポイントURLを取得
-FASTAPI_ENDPOINT_URL = os.environ.get('https://3385-34-82-152-218.ngrok-free.app/')
+FASTAPI_ENDPOINT_URL = os.environ.get('https://a447-34-125-216-184.ngrok-free.app/')
 
 # FastAPIへのリクエストタイムアウト（秒）
 REQUEST_TIMEOUT = 30 # 必要に応じて調整
